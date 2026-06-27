@@ -1,46 +1,33 @@
 # asqot
-ASQOT: Ask Smart Questions, Optimize Thinking 🚀
-The ASQOT project is an integrated administrative and educational system embedded with Artificial Intelligence, aiming to add the "missing cognitive layer" to the educational process
-The project seeks to ensure that technology strengthens human intelligence rather than replacing it, by regulating the relationship between students and AI and providing an educational environment that stimulates research and reasoning
-Furthermore, it aims to establish a "cognitive fingerprint" for thinking.
+ASQOT — Ask Smart Questions, Optimize Thinking 🚀
 
+A research-oriented administrative and educational platform enhanced with AI to add a "cognitive layer" to learning. ASQOT's goal is to strengthen human intelligence (not replace it) by regulating the student–AI interaction, stimulating reasoning and research, and building a "cognitive fingerprint" of each learner.
 
+## Problem statement
+- Over-dependence on AI: Studies show widespread student use of AI tools; many rely on them to complete assignments, which can reduce critical thinking, analysis, and creativity.
+- Educational output imbalance & labor-market gap: Current systems reward final outputs over deep understanding and reasoning, leaving graduates with insufficient real-world skills.
+- Weak oversight and communication: Parents and teachers struggle to monitor academic progress, behavioral skills, attendance, and campus financial activity.
+- Digital distraction & fragmented resources: Students are distracted by social media and lack a unified platform for schedules, tasks, grades, and teacher communication.
+- Threats to academic integrity: Traditional plagiarism detectors are circumvented; process-oriented reasoning evaluation is needed instead.
+- Behavioral and cognitive impacts: Unregulated AI use contributes to academic laziness and poor decision-making.
 
+## Solution overview
+ASQOT combines administrative tools and guided AI to transform how students learn and how institutions measure thinking.
 
+### Core features
+- Four-interface ecosystem: integrated views and workflows for Students, Teachers, Parents, and University Administration.
+- Guided AI (Restricted AI): the system provides hints and guided steps rather than direct answers, encouraging independent research and critical thinking.
+- Process-focused assessment: evaluates the reasoning and steps behind answers (the "thinking process") rather than only the final output.
+- Unified workspace: one platform including a multi-language code editor (Python, C++, C#, JS, Java), documents, and design tools.
+- Anti-distraction mode: disables external apps and notifications during designated study sessions to improve focus.
+- Thinking-style customization: teachers can set desired cognitive styles for assignments (e.g., Critical, Creative, Logical, Philosophical); AI evaluates reasoning quality accordingly.
+- Smart University ID integration: links smart cards for campus payments and automated attendance tracking.
+- Productivity tools: Pomodoro timer, personalized schedules, spaced repetition (Anki-style) for better retention.
+- Cognitive analytics dashboards: data-driven insights on academic progress and development of cognitive skills.
+- Privacy & security: designed to protect student data and comply with institutional policies.
 
-Over-dependence on AI: Statistics indicate that 77% of students use AI tools, and 24% admit they cannot complete assignments without them, leading to a decline in critical thinking, analysis, and innovation skills
-.
-Educational Output Imbalance & Labor Market Gap: Many graduates lack essential skills because the current system rewards "final output" rather than "deep understanding and reasoning," causing a drop in employer confidence
-.
-Weak Oversight and Communication: ASQOT addresses the difficulty parents and teachers face in monitoring a student's academic progress, behavioral skills, attendance, and even financial habits on campus
-.
-Digital Distraction and Source Fragmentation: Students suffer from social media distractions and the lack of a unified platform that integrates schedules, tasks, grades, and teacher communication in one place
-.
-Threats to Academic Integrity: It solves the issue of plagiarism and the bypassing of traditional detection tools by focusing on measuring and developing the "reasoning process" behind the answers
-.
-Behavioral and Cognitive Impacts: The project aims to reduce academic laziness (reported at 68.9% due to AI misuse) and the poor decision-making associated with unregulated AI reliance
-
-
-
-
-
-
-
-
-Integrated Four-Interface System: The platform connects students, teachers, parents, and university administration into a single ecosystem for seamless communication and oversight
-.
-Guided AI (Restricted AI): Instead of providing direct answers, the AI offers hints and guided steps, forcing students to research and think independently to foster critical reasoning
-.
-Unified Workspace: A centralized environment containing all necessary tools, including a multi-language code editor (Python, C++, C#, JS, Java), documents, and design software
-.
-Anti-Distraction Mechanism: The system disables external apps and notifications (e.g., social media) during designated study hours to maintain focus
-.
-Thinking Style Customization: Teachers can set specific cognitive styles for assignments (e.g., Critical, Creative, Logical, or Philosophical), and the AI evaluates the quality of the student's reasoning accordingly
-.
-Smart University ID Integration: The system links to a smart card for on-campus financial transactions and automated attendance tracking
-.
-Productivity Enhancements: Includes built-in tools like a Pomodoro timer, personalized study scheduling, and spaced repetition (Anki cards) for efficient learning
-.
-Cognitive Analytics Dashboards: Provides universities with data-driven insights into students' academic progress and the development of their cognitive skills
-.
-
+## Benefits
+- Promotes deeper understanding and transferable skills.
+- Reduces reliance on off-the-shelf AI answers; restores emphasis on reasoning.
+- Improves transparency for parents and faculty through consolidated monitoring tools.
+- Helps universities track and foster cognitive skill development at scale.
