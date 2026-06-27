@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Metrics & Rewards | ASQOT Academic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --sky-blue-bg: #F8FAFC;
+            --sky-blue-card: #F0F9FF;
+            --sky-blue-accent: #E0F2FE;
+            --primary-orange: #FF8C42;
+            --primary-orange-hover: #E57833;
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --border: #E2E8F0;
+            --alert-red: #EF4444;
+            --alert-red-bg: #FEF2F2;
+            --success-green: #10B981;
+            --success-green-bg: #F0FDF4;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--sky-blue-bg); color: var(--text-dark); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+        /* Navigation Sidebar */
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 48px; letter-spacing: -0.5px; text-decoration: none; display: block; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-gray); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: var(--radius-md); transition: var(--transition); }
+        .nav-item.active a, .nav-item a:hover { background: var(--sky-blue-bg); color: var(--text-dark); }
+        .nav-item.active a { border-right: 3px solid var(--primary-orange); background: var(--sky-blue-card); color: var(--text-dark); border-radius: var(--radius-md) 0 0 var(--radius-md); }
+        
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 24px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; background: var(--sky-blue-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--text-dark); border: 1px solid var(--border); }
+
+        /* Main Workspace Container */
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 48px; width: calc(100% - 260px); }
+
+        /* Top Header Area */
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .workspace-title h1 { font-size: 24px; font-weight: 700; color: var(--text-dark); }
+        .workspace-title p { color: var(--text-gray); font-size: 14px; margin-top: 4px; }
+
+        /* Layout Architecture Grid */
+        .metrics-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
+
+        /* Panels Container Styling */
+        .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 24px; transition: var(--transition); }
+        .panel:hover { border-color: #CBD5E1; }
+        .panel-heading { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Wallet Core Card Architecture */
+        .wallet-card { background: linear-gradient(135deg, var(--text-dark) 0%, #1E293B 100%); color: var(--white); padding: 24px; border-radius: var(--radius-md); position: relative; overflow: hidden; }
+        .wallet-card::after { content: ''; position: absolute; top: -50%; right: -20%; width: 180px; height: 180px; background: rgba(255, 140, 66, 0.1); border-radius: 50%; }
+        .wallet-balance { font-size: 42px; font-weight: 800; color: var(--primary-orange); margin-top: 8px; letter-spacing: -1px; }
+        
+        .level-progress-container { margin-top: 20px; }
+        .level-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #94A3B8; }
+        .level-bar { height: 6px; background: #334155; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .level-fill { height: 100%; width: 65%; background: var(--primary-orange); border-radius: 4px; transition: width 0.4s ease; }
+
+        /* Transaction Toast Feedbacks */
+        .transaction-toast { background: var(--success-green-bg); border: 1px solid #BBF7D0; color: var(--success-green); padding: 12px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; margin-bottom: 20px; display: none; align-items: center; justify-content: space-between; animation: fadeIn 0.2s ease-in-out; }
+
+        /* Badges System Matrix Layout */
+        .badges-matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+        .badge-node { border: 1px solid var(--border); background: var(--sky-blue-bg); border-radius: var(--radius-md); padding: 16px; text-align: center; transition: var(--transition); position: relative; }
+        .badge-node:hover { transform: translateY(-2px); border-color: var(--primary-orange); }
+        .badge-icon { width: 50px; height: 50px; background: var(--sky-blue-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 22px; border: 2px solid var(--white); box-shadow: var(--shadow-sm); }
+        .badge-title { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+        .badge-desc { font-size: 11px; color: var(--text-gray); margin-top: 4px; font-weight: 500; }
+        
+        /* Locked Badges System Style */
+        .badge-node.locked { opacity: 0.55; filter: grayscale(40%); background: #FAFAFA; border-style: dashed; }
+        .badge-node.locked .badge-icon { background: #E2E8F0; }
+        .lock-indicator { position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 700; color: var(--text-gray); background: #E2E8F0; padding: 2px 6px; border-radius: 10px; }
+
+        /* Marketplace Reward Hub Grid Layout */
+        .marketplace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .reward-card { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition); background: var(--white); }
+        .reward-card:hover { border-color: #CBD5E1; box-shadow: var(--shadow-sm); }
+        .reward-meta h4 { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+        .reward-meta p { font-size: 12px; color: var(--text-gray); margin-top: 4px; line-height: 1.5; font-weight: 500; }
+        .reward-action-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
+        .price-tag { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .price-tag span { color: var(--primary-orange); font-size: 16px; font-weight: 800; }
+        
+        .purchase-btn { background: var(--text-dark); color: var(--white); border: none; padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: var(--transition); }
+        .purchase-btn:hover { background: var(--primary-orange); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 1024px) { .metrics-grid { grid-template-columns: 1fr; } .marketplace-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- Institutional Navigation Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">ASQOT</a>
+         <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+            <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">JD</div>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">John Doe</h4>
+                    <p style="font-size: 11px; color: var(--text-gray); font-weight: 500;">ID: 2609-ASQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Workspace Wrapper -->
+    <main class="main-content">
+        
+        <!-- Workspace Dynamic Header -->
+        <header class="workspace-header">
+            <div class="workspace-title">
+                <h1>Performance Metrics & Milestones</h1>
+                <p>Ecosystem point allocation management ledger, verified institutional assets, and behavior badges.</p>
+            </div>
+        </header>
+
+        <!-- Dynamic Transaction Success Feedback Bar -->
+        <div class="transaction-toast" id="toast-node">
+            <span id="toast-text">Asset successfully acquired and added to profile registry.</span>
+            <button onclick="dismissToast()" style="background: transparent; border: none; color: inherit; font-weight: 700; cursor: pointer;">Dismiss</button>
+        </div>
+
+        <div class="metrics-grid">
+            
+            <!-- Left Grid Column: Point Balances and Wallets Architecture -->
+            <section>
+                <div class="panel">
+                    <h3 class="panel-heading">Ecosystem Wallet</h3>
+                    <div class="wallet-card">
+                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: #94A3B8;">Available Capital Ledger</span>
+                        <div class="wallet-balance"><span id="wallet-pts-display">750</span> <span style="font-size: 16px; font-weight: 600; color: var(--white);">Pts</span></div>
+                        
+                        <div class="level-progress-container">
+                            <div class="level-header">
+                                <span>Academic Tier: Level 4</span>
+                                <span>250 Pts to Tier 5</span>
+                            </div>
+                            <div class="level-bar">
+                                <div class="level-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Features Explanation Panel -->
+                <div class="panel">
+                    <h3 class="panel-heading">Asset Ledger Guidelines</h3>
+                    <p style="font-size: 12px; color: var(--text-gray); line-height: 1.6; font-weight: 500;">Points are compiled automatically via real-time telemetry analytics based on code structural integrity, deep analysis thresholds, and cognitive efficiency. Points can be exchanged instantly for system hints, verification certification, or corporate campus perks.</p>
+                </div>
+            </section>
+
+            <!-- Right Grid Column: Badges Matrix & Rewards Storefront -->
+            <section>
+                <!-- Badges Management Section -->
+                <div class="panel">
+                    <h3 class="panel-heading">Verified Behavioral Badges</h3>
+                    
+                    <div class="badges-matrix">
+                        <!-- Unlocked Badge 1 -->
+                        <div class="badge-node">
+                            <div class="badge-icon">🧠</div>
+                            <div class="badge-title">Critical Thinker</div>
+                            <div class="badge-desc">Maintained a depth index over 85% for 3 tasks.</div>
+                        </div>
+
+                        <!-- Unlocked Badge 2 -->
+                        <div class="badge-node">
+                            <div class="badge-icon">⚡</div>
+                            <div class="badge-title">Logician</div>
+                            <div class="badge-desc">Zero memory leakage profiles on compilation.</div>
+                        </div>
+
+                        <!-- Locked Future Badge 3 -->
+                        <div class="badge-node locked">
+                            <div class="lock-indicator">Locked</div>
+                            <div class="badge-icon">🛡️</div>
+                            <div class="badge-title">Integrity Master</div>
+                            <div class="badge-desc">Complete 5 tasks with <10% AI match score.</div>
+                        </div>
+
+                        <!-- Locked Future Badge 4 -->
+                        <div class="badge-node locked">
+                            <div class="lock-indicator">Locked</div>
+                            <div class="badge-icon">🧘</div>
+                            <div class="badge-title">Fatigue Resistant</div>
+                            <div class="badge-desc">Operate 3 continuous hours inside nominal stress zones.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reward Storefront Marketplace Section -->
+                <div class="panel">
+                    <h3 class="panel-heading">Ecosystem Rewards Marketplace</h3>
+                    
+                    <div class="marketplace-grid">
+                        <!-- Reward 1 -->
+                        <div class="reward-card">
+                            <div class="reward-meta">
+                                <h4>Institutional Verification Certificate</h4>
+                                <p>Generates a verifiable, blockchain-anchored certificate of performance for Module 4 competency arrays.</p>
+                            </div>
+                            <div class="reward-action-row">
+                                <div class="price-tag"><span>200</span> Pts</div>
+                                <button class="purchase-btn" onclick="executePurchase('Verification Certificate', 200)">Acquire Asset</button>
+                            </div>
+                        </div>
+
+                        <!-- Reward 2 -->
+                        <div class="reward-card">
+                            <div class="reward-meta">
+                                <h4>Advanced Course Discount Voucher</h4>
+                                <p>Grants an official 25% economic waiver on next-semester specialized algorithmic tracks.</p>
+                            </div>
+                            <div class="reward-action-row">
+                                <div class="price-tag"><span>450</span> Pts</div>
+                                <button class="purchase-btn" onclick="executePurchase('25% Course Discount', 450)">Acquire Asset</button>
+                            </div>
+                        </div>
+
+                        <!-- Reward 3 -->
+                        <div class="reward-card">
+                            <div class="reward-meta">
+                                <h4>Campus Purchase Token</h4>
+                                <p>Converts points into a micro-token voucher redeemable for meals or books at internal university facilities.</p>
+                            </div>
+                            <div class="reward-action-row">
+                                <div class="price-tag"><span>150</span> Pts</div>
+                                <button class="purchase-btn" onclick="executePurchase('Campus Purchase Token', 150)">Acquire Asset</button>
+                            </div>
+                        </div>
+
+                        <!-- Reward 4 -->
+                        <div class="reward-card">
+                            <div class="reward-meta">
+                                <h4>Premium UI Theme Configuration</h4>
+                                <p>Unlocks the advanced obsidian dark-mode interface skin across all console workspaces.</p>
+                            </div>
+                            <div class="reward-action-row">
+                                <div class="price-tag"><span>100</span> Pts</div>
+                                <button class="purchase-btn" onclick="executePurchase('Premium UI Theme', 100)">Acquire Asset</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Interactive Subsystem Processing Logic -->
+    <script>
+        // Global Wallet Points Balance Configuration State
+        let availablePointsLedger = 750;
+
+        // Core Transaction Functionality for Rewards Marketplace
+        function executePurchase(rewardName, pointCost) {
+            const toastNode = document.getElementById('toast-node');
+            const toastText = document.getElementById('toast-text');
+            const pointsDisplay = document.getElementById('wallet-pts-display');
+
+            // Verification Check: Evaluate if account has sufficient point balances
+            if (availablePointsLedger >= pointCost) {
+                // Deduct values and update visual matrices
+                availablePointsLedger -= pointCost;
+                pointsDisplay.innerText = availablePointsLedger;
+
+                // Fire transaction feedback toast notification
+                toastNode.style.display = 'flex';
+                toastNode.style.background = 'var(--success-green-bg)';
+                toastNode.style.borderColor = '#BBF7D0';
+                toastNode.style.color = 'var(--success-green)';
+                toastText.innerText = `Transaction Approved: ${rewardName} has been compiled and bound to your institution profile. -${pointCost} Pts.`;
+            } else {
+                // Fire transaction rejection warning alert
+                toastNode.style.display = 'flex';
+                toastNode.style.background = 'var(--alert-red-bg)';
+                toastNode.style.borderColor = '#FECACA';
+                toastNode.style.color = 'var(--alert-red)';
+                toastText.innerText = `Transaction Rejected: Insufficient balance available to clear the required ${pointCost} Pts for this asset.`;
+            }
+        }
+
+        function dismissToast() {
+            document.getElementById('toast-node').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

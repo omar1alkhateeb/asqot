@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | ASQOT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --sky-blue: #F0F9FF; --primary-orange: #FF8C42; --text-dark: #1A1A2E; --border: #E2E8F0; }
+        body { background: var(--sky-blue); font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .auth-card { background: white; padding: 40px; border-radius: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); width: 100%; max-width: 450px; text-align: center; }
+        
+        .role-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0; }
+        .role-btn { padding: 10px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .role-btn.active { background: var(--primary-orange); color: white; border-color: var(--primary-orange); }
+        
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; font-weight: 600; }
+        input { width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); outline: none; }
+        input:focus { border-color: var(--primary-orange); }
+        
+        .btn-orange { width: 100%; background: var(--primary-orange); color: white; padding: 14px; border-radius: 40px; border: none; font-weight: 700; margin-top: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h2>Create Account</h2>
+        <p style="color: #64748B;">Join the future of smart learning</p>
+        
+        <div class="role-selector">
+            <div class="role-btn active">Student</div>
+            <div class="role-btn">Teacher</div>
+            <div class="role-btn">Parent</div>
+            <div class="role-btn">Uni</div>
+        </div>
+
+        <form>
+            <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+            <div class="input-group"><label>Email</label><input type="email" placeholder="john@example.com"></div>
+            <div class="input-group"><label>Password</label><input type="password" placeholder="********"></div>
+            <button type="submit" class="btn-orange">Sign Up Now</button>
+        </form>
+        <p style="margin-top: 20px; font-size: 14px;">Already have an account? <a href="login.html" style="color: var(--primary-orange); font-weight: 700; text-decoration: none;">Login</a></p>
+    </div>
+</body>
+</html>

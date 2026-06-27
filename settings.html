@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASQOT | Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', 'Poppins', sans-serif; background: #f0f9ff; color: #1a1a2e; }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: #ffffff; border-right: 1px solid #e2e8f0; position: fixed; height: 100vh; overflow-y: auto; }
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #e2e8f0; }
+        .sidebar-header .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #1a1a2e, #16213e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .user-info { padding: 1.5rem; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(135deg, #ff8c42, #ffb366); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+        .avatar i { font-size: 3rem; color: #fff; }
+        .nav-menu { padding: 1rem 0; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.5rem; color: #64748b; text-decoration: none; transition: all 0.3s; }
+        .nav-item:hover, .nav-item.active { background: #f0f9ff; color: #ff8c42; border-right: 3px solid #ff8c42; }
+        .main-content { flex: 1; margin-left: 280px; padding: 2rem; }
+        .settings-card { background: #fff; border-radius: 24px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid #e2e8f0; }
+        @media (max-width: 768px) { .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="logo">ASQOT <span>Student</span></div></div>
+            <div class="user-info"><div class="avatar"><i class="fas fa-user-graduate"></i></div><h3>Ahmed Mansour</h3><p>Computer Science • Year 3</p></div>
+         <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+            <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <main class="main-content">
+            <h1 style="margin-bottom: 1.5rem;">⚙️ Settings</h1>
+            <div class="settings-card"><h3>Profile Information</h3><div class="setting-row"><span>Full Name</span><span>Ahmed Mansour <a href="#">Edit</a></span></div><div class="setting-row"><span>Email</span><span>ahmed@university.edu</span></div><div class="setting-row"><span>Password</span><span>******** <a href="#">Change</a></span></div></div>
+            <div class="settings-card"><h3>Notifications</h3><div class="setting-row"><span>Email Notifications</span><label><input type="checkbox" checked> Enable</label></div><div class="setting-row"><span>Push Notifications</span><label><input type="checkbox"> Enable</label></div></div>
+            <div class="settings-card"><h3>Preferences</h3><div class="setting-row"><span>Language</span><select><option>English</option><option>Arabic</option></select></div><div class="setting-row"><span>Theme</span><select><option>Light</option><option>Dark</option></select></div></div>
+            <div class="settings-card"><h3>Linked Accounts</h3><div class="setting-row"><span>Link Parent Account</span><button style="background: #ff8c42; border: none; padding: 0.5rem 1rem; border-radius: 20px;">Connect</button></div></div>
+        </main>
+    </div>
+</body>
+</html>

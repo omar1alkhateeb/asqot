@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | ASQOT Academic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --sky-blue-bg: #F8FAFC;
+            --sky-blue-card: #F0F9FF;
+            --sky-blue-accent: #E0F2FE;
+            --primary-orange: #FF8C42;
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --border: #E2E8F0;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--sky-blue-bg); color: var(--text-dark); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+        /* Navigation Sidebar */
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 48px; letter-spacing: -0.5px; text-decoration: none; display: block; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-gray); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: var(--radius-md); transition: var(--transition); }
+        .nav-item.active a, .nav-item a:hover { background: var(--sky-blue-bg); color: var(--text-dark); }
+        .nav-item.active a { border-right: 3px solid var(--primary-orange); background: var(--sky-blue-card); color: var(--text-dark); border-radius: var(--radius-md) 0 0 var(--radius-md); }
+        
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 24px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; background: var(--sky-blue-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--text-dark); border: 1px solid var(--border); }
+
+        /* Main Workspace Container */
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 48px; width: calc(100% - 260px); }
+        
+        /* Dashboard Header */
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .welcome-text h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-dark); margin-bottom: 4px; }
+        .welcome-text p { color: var(--text-gray); font-size: 14px; }
+        
+        /* Core Action Button */
+        .btn-primary { background: var(--primary-orange); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm); }
+        .btn-primary:hover { background: #e57833; transform: translateY(-1px); }
+
+        /* Layout Framework */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+        .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+        
+        /* Analytics Cards */
+        .metric-card { background: var(--white); padding: 24px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: var(--transition); }
+        .metric-card:hover { box-shadow: var(--shadow-md); border-color: #CBD5E1; }
+        .metric-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .metric-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-gray); font-weight: 700; }
+        .metric-value { font-size: 32px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+        .metric-indicator { font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; }
+        .indicator-stable { background: #F1F5F9; color: #334155; }
+        .indicator-positive { background: #E2FBE8; color: #15803D; }
+        .indicator-alert { background: #FEF3C7; color: #B45309; }
+
+        /* Primary Content Block */
+        .panel { background: var(--white); padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 32px; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .panel-title { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+        
+        /* Specialized Chart Analytics Graphic */
+        .chart-container { height: 240px; background: var(--sky-blue-bg); border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; align-items: flex-end; padding: 24px 32px; gap: 24px; position: relative; }
+        .chart-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+        .chart-bar { width: 100%; background: #475569; border-radius: 4px 4px 0 0; transition: var(--transition); position: relative; }
+        .chart-bar.highlighted { background: var(--primary-orange); }
+        .chart-axis-label { margin-top: 12px; font-size: 12px; color: var(--text-gray); font-weight: 600; }
+
+        /* Structured Logs */
+        .log-list { display: flex; flex-direction: column; }
+        .log-entry { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
+        .log-entry:last-child { border-bottom: none; padding-bottom: 0; }
+        .log-meta { display: flex; align-items: center; gap: 16px; }
+        .log-bullet { width: 6px; height: 6px; border-radius: 50%; background: #94A3B8; }
+        .log-bullet.active { background: var(--primary-orange); }
+        .log-text { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        .log-timestamp { font-size: 12px; color: var(--text-gray); }
+
+        /* Secondary Action Area */
+        .recommendation-panel { background: var(--sky-blue-card); border: 1px solid var(--sky-blue-accent); padding: 24px; border-radius: var(--radius-lg); }
+        .recommendation-meta { margin-bottom: 16px; font-size: 13px; color: var(--text-gray); line-height: 1.5; }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; width: 100%; padding: 24px; }
+            .metrics-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Institutional Navigation Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">ASQOT</a>
+      <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+              <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+              <li class="nav-item"><a href="cognitive_fatigue.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">JD</div>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">John Doe</h4>
+                    <p style="font-size: 11px; color: var(--text-gray); font-weight: 500;">Account ID: 2609-ASQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace Content -->
+    <main class="main-content">
+        <!-- Dashboard Header -->
+        <header class="dashboard-header">
+            <div class="welcome-text">
+                <h1>Student Analytics Console</h1>
+                <p>Real-time telemetry and biometrical processing tracking.</p>
+            </div>
+            <button class="btn-primary" onclick="location.href='06_learning_space.html'">Initialize Session</button>
+        </header>
+
+        <!-- Main Dashboard Configuration Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Grid Pane: Quantifiable Performance Matrices -->
+            <section>
+                <!-- Key Performance Indicators Row -->
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Vitality Index</span>
+                            <span class="metric-indicator indicator-positive">+4.2% Delta</span>
+                        </div>
+                        <div class="metric-value">84.0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Fatigue Matrix</span>
+                            <span class="metric-indicator indicator-stable">Optimal Range</span>
+                        </div>
+                        <div class="metric-value">12.4%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Challenge Coefficient</span>
+                            <span class="metric-indicator indicator-alert">Adaptive Level 2</span>
+                        </div>
+                        <div class="metric-value">2.41</div>
+                    </div>
+                </div>
+
+                <!-- Empirical Data Analytical Curve -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Weekly Cognitive Architecture Timeline</h3>
+                        <span style="font-size: 12px; color: var(--text-gray); font-weight: 600;">Evaluation Period: May 2026</span>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 65%;"></div><span class="chart-axis-label">Mon</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar highlighted" style="height: 80%;"></div><span class="chart-axis-label">Tue</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 45%;"></div><span class="chart-axis-label">Wed</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar highlighted" style="height: 90%;"></div><span class="chart-axis-label">Thu</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 75%;"></div><span class="chart-axis-label">Fri</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar highlighted" style="height: 85%;"></div><span class="chart-axis-label">Sat</span></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 95%;"></div><span class="chart-axis-label">Sun</span></div>
+                    </div>
+                    <div style="margin-top: 24px; display: flex; gap: 24px; font-size: 12px; color: var(--text-gray); font-weight: 600;">
+                        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; background: var(--primary-orange); border-radius: 2px;"></span> High Focus Metric</span>
+                        <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; background: #475569; border-radius: 2px;"></span> Secondary Diagnostic Range</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Grid Pane: System Parameters and Logs -->
+            <section>
+                <!-- Predictive Calibration Recommendation -->
+                <div class="panel" style="margin-bottom: 32px;">
+                    <div class="panel-header"><h3 class="panel-title">Algorithmic Guidance</h3></div>
+                    <div class="recommendation-panel">
+                        <h4 style="margin-bottom: 8px; font-weight: 700; font-size: 15px; color: var(--text-dark);">Core Objective: Structural Logic</h4>
+                        <p class="recommendation-meta">Current neuro- fingerprint states register optimized aptitude windows for abstract configuration analysis and pattern evaluation matrices.</p>
+                        <button class="btn-primary" style="width: 100%; padding: 10px;" onclick="location.href='06_learning_space.html'">Execute Environment</button>
+                    </div>
+                </div>
+
+                <!-- Academic Audit Activity Logs -->
+                <div class="panel">
+                    <div class="panel-header"><h3 class="panel-title">System Activity Log</h3></div>
+                    <div class="log-list">
+                        <div class="log-entry">
+                            <div class="log-meta">
+                                <span class="log-bullet active"></span>
+                                <span class="log-text">Biometric Calibration Verified</span>
+                            </div>
+                            <span class="log-timestamp">02:14 UTC</span>
+                        </div>
+                        <div class="log-entry">
+                            <div class="log-meta">
+                                <span class="log-bullet"></span>
+                                <span class="log-text">Fatigue Deviation Alert Detected</span>
+                            </div>
+                            <span class="log-timestamp">Yesterday</span>
+                        </div>
+                        <div class="log-entry">
+                            <div class="log-meta">
+                                <span class="log-bullet active"></span>
+                                <span class="log-text">Milestone Verification Confirmed</span>
+                            </div>
+                            <span class="log-timestamp">3 Days Ago</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

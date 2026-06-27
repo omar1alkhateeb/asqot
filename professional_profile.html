@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Profile | ASQOT Academic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --sky-blue-bg: #F8FAFC;
+            --sky-blue-card: #F0F9FF;
+            --sky-blue-accent: #E0F2FE;
+            --primary-orange: #FF8C42;
+            --primary-orange-hover: #E57833;
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --border: #E2E8F0;
+            --linkedin-blue: #0A66C2;
+            --success-green: #10B981;
+            --success-green-bg: #F0FDF4;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--sky-blue-bg); color: var(--text-dark); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+        /* Navigation Sidebar */
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 48px; letter-spacing: -0.5px; text-decoration: none; display: block; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-gray); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: var(--radius-md); transition: var(--transition); }
+        .nav-item.active a, .nav-item a:hover { background: var(--sky-blue-bg); color: var(--text-dark); }
+        .nav-item.active a { border-right: 3px solid var(--primary-orange); background: var(--sky-blue-card); color: var(--text-dark); border-radius: var(--radius-md) 0 0 var(--radius-md); }
+        
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 24px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; background: var(--sky-blue-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--text-dark); border: 1px solid var(--border); }
+
+        /* Main Workspace Container */
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 48px; width: calc(100% - 260px); }
+
+        /* Layout Architecture Grid */
+        .profile-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 32px; }
+
+        /* Panels Container Styling */
+        .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 24px; transition: var(--transition); }
+        .panel-heading { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Header Profile Card Block */
+        .bio-card { text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 24px; }
+        .large-avatar { width: 90px; height: 90px; background: var(--sky-blue-card); border: 3px solid var(--primary-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; margin: 0 auto 16px auto; color: var(--text-dark); }
+        .bio-card h2 { font-size: 20px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+        .bio-card p { font-size: 13px; color: var(--text-gray); margin-top: 4px; font-weight: 600; }
+        .meta-label-box { display: inline-block; background: var(--sky-blue-bg); border: 1px solid var(--border); font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 12px; margin-top: 10px; }
+
+        /* Followers & Connections mini layout */
+        .connection-hub { display: flex; justify-content: space-around; background: var(--sky-blue-bg); padding: 12px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border); }
+        .connection-stat h5 { font-size: 18px; font-weight: 800; color: var(--text-dark); }
+        .connection-stat span { font-size: 11px; color: var(--text-gray); font-weight: 600; }
+
+        /* Buttons Row & Integration Triggers */
+        .action-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .btn { padding: 12px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); border: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-dark { background: var(--text-dark); color: var(--white); }
+        .btn-dark:hover { background: #1E293B; }
+        .btn-linkedin { background: var(--linkedin-blue); color: var(--white); }
+        .btn-linkedin:hover { background: #084C8F; }
+
+        /* Generic Data Item List Styles (Certificates & Projects) */
+        .data-item { padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 12px; background: var(--sky-blue-bg); display: flex; justify-content: space-between; align-items: flex-start; }
+        .data-item-content h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+        .data-item-content p { font-size: 12px; color: var(--text-gray); margin-top: 4px; font-weight: 500; line-height: 1.5; }
+        .item-badge { background: var(--white); border: 1px solid var(--border); font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 4px; white-space: nowrap; }
+
+        /* Partnership Job Tracking Table System */
+        .job-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .job-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 12px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; }
+        .job-table td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; }
+        .status-pill { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 700; border-radius: 12px; }
+        .status-pill.review { background: #FEF3C7; color: #D97706; }
+        .status-pill.interview { background: var(--sky-blue-accent); color: #0284C7; }
+        .status-pill.approved { background: var(--success-green-bg); color: var(--success-green); }
+
+        /* Toast Feedback Alert Styling */
+        .toast-banner { background: var(--success-green-bg); border: 1px solid #BBF7D0; color: var(--success-green); padding: 12px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; margin-bottom: 24px; display: none; justify-content: space-between; align-items: center; animation: slideDown 0.2s ease; }
+
+        /* PRINT STYLING - EXCLUSIVE FOR DYNAMIC CV EXPORT GENERATION */
+        @media print {
+            body { background: white; color: black; }
+            .sidebar, .main-content > header, .action-stack, .panel-heading button, .telemetry-ignore, .toast-banner, .job-tracking-panel { display: none !important; }
+            .main-content { margin-left: 0 !important; padding: 0 !important; width: 100% !important; }
+            .profile-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+            .panel { border: none !important; box-shadow: none !important; padding: 0 !important; margin-bottom: 30px !important; }
+            .data-item { background: transparent !important; border-left: 3px solid #000 !important; border-top:none !important; border-right:none !important; border-bottom:none !important; border-radius:0 !important; }
+        }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 1100px) { .profile-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- Institutional Navigation Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">ASQOT</a>
+        <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+            <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">OA</div>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">Omar Al-Khateeb</h4>
+                    <p style="font-size: 11px; color: var(--text-gray); font-weight: 500;">ID: 2609-ASQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Workspace Wrapper -->
+    <main class="main-content">
+        
+        <!-- Dynamic Institutional Notification Banner -->
+        <div class="toast-banner" id="profile-toast">
+            <span id="toast-message">Data array successfully synchronized.</span>
+            <button onclick="dismissToast()" style="background:transparent; border:none; color:inherit; font-weight:700; cursor:pointer;">Dismiss</button>
+        </div>
+
+        <div class="profile-grid">
+            
+            <!-- Left Grid Pane: Identity Records and Integration Anchors -->
+            <section>
+                <div class="panel">
+                    <div class="bio-card">
+                        <div class="large-avatar">OA</div>
+                        <h2>Omar Al-Khateeb</h2>
+                        <p>Front-end Developer & Project Manager</p>
+                        <div class="meta-label-box">Faculty of Medical Sciences (USTY)</div>
+                    </div>
+
+                    <!-- Profile Access/Followers Metrics -->
+                    <div class="connection-hub">
+                        <div class="connection-stat">
+                            <h5>14</h5>
+                            <span>Auditors</span>
+                        </div>
+                        <div class="connection-stat">
+                            <h5>8</h5>
+                            <span>Corporate Views</span>
+                        </div>
+                        <div class="connection-stat">
+                            <h5>Active</h5>
+                            <span>Privacy Status</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Integrations Triggers -->
+                    <div class="action-stack telemetry-ignore">
+                        <button class="btn btn-dark" onclick="generateSystemCV()">
+                            📄 Generate & Export CV Document
+                        </button>
+                        <button class="btn btn-linkedin" onclick="triggerLinkedInSync()">
+                            🔗 Synchronize Assets to LinkedIn
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Academic Verification Credentials -->
+                <div class="panel">
+                    <h3 class="panel-heading">Verified Competency Certifications</h3>
+                    
+                    <div class="data-item">
+                        <div class="data-item-content">
+                            <h4>Advanced Algorithmic Efficiency Matrix</h4>
+                            <p>Issued by ASQOT Academic Hub. Verified Depth Index: 88%.</p>
+                        </div>
+                        <div class="item-badge">Verified</div>
+                    </div>
+
+                    <div class="data-item">
+                        <div class="data-item-content">
+                            <h4>Linear Data Optimization Track</h4>
+                            <p>Compliance evaluation cleared with 0% compilation memory leakage.</p>
+                        </div>
+                        <div class="item-badge">Verified</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Grid Pane: Project Registries and Enterprise Partnership Tracking -->
+            <section>
+                <!-- Project Ledger Inventory -->
+                <div class="panel">
+                    <h3 class="panel-heading">Institutional & Platform Projects Ledger</h3>
+
+                    <div class="data-item">
+                        <div class="data-item-content">
+                            <h4>Adaptive Multimode Code Workspace Infrastructure</h4>
+                            <p>Engineered an operational integrated system connecting text markup editors, linear terminal interfaces, and Canvas architecture matrices for student analytics.</p>
+                        </div>
+                        <div class="item-badge">Core Engine</div>
+                    </div>
+
+                    <div class="data-item">
+                        <div class="data-item-content">
+                            <h4>Biometric Data Array Parsing Pipeline</h4>
+                            <p>Constructed a script architecture to safely process continuous cognitive strain inputs and calculate behavioral fatigue margins without caching lag.</p>
+                        </div>
+                        <div class="item-badge">Data Science</div>
+                    </div>
+                </div>
+
+                <!-- Partner Placement & Application Pipeline Tracker -->
+                <div class="panel job-tracking-panel">
+                    <h3 class="panel-heading">Enterprise Partner Placement Track</h3>
+                    
+                    <table class="job-table">
+                        <thead>
+                            <tr>
+                                <th>Enterprise Partner</th>
+                                <th>Target Position</th>
+                                <th>Status Vector</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Apex Software Labs</td>
+                                <td>Junior Systems Engineer</td>
+                                <td><span class="status-pill review">Under Review</span></td>
+                            </tr>
+                            <tr>
+                                <td>Biometric Synthesis Corp</td>
+                                <td>Data Operations Intern</td>
+                                <td><span class="status-pill interview">Interview Scheduled</span></td>
+                            </tr>
+                            <tr>
+                                <td>Nexus Academic Solutions</td>
+                                <td>Front-end Infrastructure Fellow</td>
+                                <td><span class="status-pill approved">Hired / Closed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripting Infrastructure Layer: Engine Handling Professional Matrix Operations -->
+    <script>
+        // Trigger 1: Real-time Institutional CV Compilation & Print Trigger
+        function generateSystemCV() {
+            // Fires browser native print interface. 
+            // CSS @media print layout rules automatically strip sidebars and formatting to isolate an ultra-clean corporate CV document.
+            window.print();
+        }
+
+        // Trigger 2: Emulated LinkedIn Integration Engine
+        function triggerLinkedInSync() {
+            const toast = document.getElementById('profile-toast');
+            const message = document.getElementById('toast-message');
+
+            toast.style.display = 'flex';
+            message.innerText = "System Sync Core Action Activated: Academic certifications and project metrics have been packeted and deployed securely to your real LinkedIn profile credential ledger.";
+            
+            // Auto fade out feedback after 5s
+            setTimeout(() => { dismissToast(); }, 5000);
+        }
+
+        function dismissToast() {
+            document.getElementById('profile-toast').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

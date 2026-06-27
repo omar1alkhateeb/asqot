@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Space | ASQOT Academic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --sky-blue-bg: #F8FAFC;
+            --sky-blue-card: #F0F9FF;
+            --sky-blue-accent: #E0F2FE;
+            --primary-orange: #FF8C42;
+            --primary-orange-hover: #E57833;
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --border: #E2E8F0;
+            --alert-red: #EF4444;
+            --alert-red-bg: #FEF2F2;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--sky-blue-bg); color: var(--text-dark); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+        /* Navigation Sidebar */
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 48px; letter-spacing: -0.5px; text-decoration: none; display: block; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-gray); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: var(--radius-md); transition: var(--transition); }
+        .nav-item.active a, .nav-item a:hover { background: var(--sky-blue-bg); color: var(--text-dark); }
+        .nav-item.active a { border-right: 3px solid var(--primary-orange); background: var(--sky-blue-card); color: var(--text-dark); border-radius: var(--radius-md) 0 0 var(--radius-md); }
+        
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 24px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; background: var(--sky-blue-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--text-dark); border: 1px solid var(--border); }
+
+        /* Main Workspace Container */
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 48px; width: calc(100% - 260px); }
+
+        /* Top Header Area */
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .workspace-title h1 { font-size: 24px; font-weight: 700; color: var(--text-dark); }
+        .workspace-title p { color: var(--text-gray); font-size: 14px; margin-top: 4px; }
+
+        /* Layout Architecture */
+        .workspace-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 32px; }
+
+        /* Global Panels Styling */
+        .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 24px; transition: var(--transition); }
+        .panel:hover { border-color: #CBD5E1; }
+        .panel-heading { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Integrity Warning Banner */
+        .integrity-warning { background: var(--alert-red-bg); border: 1px dashed var(--alert-red); border-radius: var(--radius-md); padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--alert-red); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
+        .integrity-warning.hidden { opacity: 0; transform: translateY(-10px); margin-bottom: 0; padding: 0; height: 0; overflow: hidden; border: none; }
+        .integrity-action { background: transparent; border: none; color: var(--alert-red); text-decoration: underline; font-weight: 700; cursor: pointer; }
+
+        /* Current Assignments List */
+        .assignment-box { padding: 16px; background: var(--sky-blue-bg); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 12px; }
+        .assignment-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-gray); font-weight: 600; margin-top: 8px; }
+
+        /* Advanced Smart Multi-editor Console */
+        .editor-container { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--white); display: flex; flex-direction: column; }
+        .editor-tabs { background: var(--sky-blue-bg); border-bottom: 1px solid var(--border); display: flex; }
+        .editor-tab { padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--text-gray); border-right: 1px solid var(--border); cursor: pointer; background: transparent; border-top: none; border-left: none; border-bottom: none; transition: var(--transition); }
+        .editor-tab:hover { color: var(--text-dark); background: rgba(0,0,0,0.02); }
+        .editor-tab.active { background: var(--white); color: var(--text-dark); font-weight: 700; border-bottom: 2px solid var(--primary-orange); }
+        
+        /* Toolbar inside Editor Container */
+        .editor-toolbar { background: #FAF9F6; border-bottom: 1px solid var(--border); padding: 8px 16px; display: none; gap: 8px; align-items: center; }
+        .toolbar-btn { background: var(--white); border: 1px solid var(--border); padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; transition: var(--transition); }
+        .toolbar-btn:hover { background: var(--sky-blue-accent); color: var(--text-dark); }
+        .color-picker { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; padding: 0; }
+
+        /* Editor Dynamic Canvas Sections */
+        .canvas-wrapper { position: relative; width: 100%; height: 350px; background: var(--white); overflow: hidden; }
+        .mode-view { display: none; width: 100%; height: 100%; }
+        .mode-view.active { display: block; }
+
+        /* TEXT EDITOR REALISM */
+        .text-editor-area { width: 100%; height: 100%; padding: 20px; font-size: 15px; color: var(--text-dark); line-height: 1.6; outline: none; overflow-y: auto; text-align: left; background: var(--white); }
+
+        /* CODE EDITOR REALISM */
+        .code-editor-container { display: flex; width: 100%; height: 100%; font-family: 'Courier New', monospace; font-size: 14px; background: #1E293B; color: #E2E8F0; }
+        .code-line-numbers { width: 45px; background: #0F172A; padding: 20px 0; text-align: right; padding-right: 12px; color: #64748B; select: none; line-height: 1.6; border-right: 1px solid #334155; overflow: hidden; }
+        .code-textarea { flex-grow: 1; height: 100%; background: transparent; border: none; resize: none; outline: none; padding: 20px; color: #F8FAFC; font-family: inherit; font-size: inherit; line-height: 1.6; overflow-y: auto; white-space: pre; }
+
+        /* WHITEBOARD REALISM */
+        .whiteboard-canvas { background: #FFFFFF; cursor: crosshair; width: 100%; height: 100%; display: block; }
+
+        /* Button Groups */
+        .action-row { display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); border: none; }
+        .btn-muted { background: var(--sky-blue-bg); border: 1px solid var(--border); color: var(--text-dark); }
+        .btn-muted:hover { background: var(--border); }
+        .btn-orange { background: var(--primary-orange); color: var(--white); box-shadow: 0 2px 4px rgba(255,140,66,0.1); }
+        .btn-orange:hover { background: var(--primary-orange-hover); transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+        /* Progressive Smart Hints System */
+        .hint-stream { display: flex; flex-direction: column; gap: 12px; }
+        .hint-node { padding: 14px 18px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; line-height: 1.5; background: var(--sky-blue-card); border-left: 4px solid var(--primary-orange); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hint-node.locked { background: var(--sky-blue-bg); border-left-color: #CBD5E1; color: var(--text-gray); }
+        .hint-content-text { margin-top: 4px; font-size: 12px; color: var(--text-gray); font-weight: 500; }
+        .hint-node.locked .hint-content-text { display: none; }
+
+        /* Dynamic Challenge Coefficient (DCC Metric) */
+        .dcc-container { background: var(--sky-blue-card); border: 1px solid var(--sky-blue-accent); padding: 20px; border-radius: var(--radius-md); text-align: center; }
+        .dcc-value-display { font-size: 40px; font-weight: 800; color: var(--text-dark); letter-spacing: -1px; transition: var(--transition); }
+        .dcc-track { height: 6px; background: var(--border); border-radius: 4px; margin-top: 16px; overflow: hidden; position: relative; }
+        .dcc-fill { height: 100%; width: 70%; background: linear-gradient(90deg, #475569 0%, var(--primary-orange) 100%); border-radius: 4px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Integrated Pomodoro System */
+        .pomodoro-box { border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md); text-align: center; background: var(--white); }
+        .pomo-time { font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; margin-bottom: 12px; color: var(--text-dark); letter-spacing: 0.5px; }
+        .pomo-controls { display: flex; justify-content: center; gap: 8px; }
+
+        /* Anki Integration Hub */
+        .anki-hub { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--sky-blue-bg); }
+        
+        /* Account Top Stats Counter */
+        .score-counter { background: var(--sky-blue-card); border: 1px solid var(--sky-blue-accent); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--text-dark); }
+
+        @media (max-width: 1200px) { .workspace-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <!-- Institutional Navigation Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">ASQOT</a>
+         <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+              <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+              <li class="nav-item"><a href="cognitive_fatigue.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">JD</div>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">John Doe</h4>
+                    <p style="font-size: 11px; color: var(--text-gray); font-weight: 500;">ID: 2609-ASQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Workspace Wrapper -->
+    <main class="main-content">
+        
+        <!-- Workspace Dynamic Header -->
+        <header class="workspace-header">
+            <div class="workspace-title">
+                <h1>Active Learning Environment</h1>
+                <p>Telemetry processing enabled. Biometric parameters are currently being measured.</p>
+            </div>
+            <div class="score-counter">Ecosystem Points: <span id="points-display">350</span> Pts</div>
+        </header>
+
+        <!-- Integrity Security Warning Mechanism -->
+        <div class="integrity-warning" id="integrity-banner">
+            <span>System Notice: External anomaly signature detected. Clipboard check is actively monitoring telemetry inputs.</span>
+            <button class="integrity-action" onclick="dismissWarning()">Dismiss Check</button>
+        </div>
+
+        <div class="workspace-grid">
+            
+            <!-- Left Primary Column: Tasks and Active Smart Editor Canvas -->
+            <section>
+                <div class="panel">
+                    <h3 class="panel-heading">Current Assignment Tasks</h3>
+                    <div class="assignment-box">
+                        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Module 4: Matrix Multi-Dimensional Optimization structures</h4>
+                        <p style="font-size: 13px; color: var(--text-gray); line-height: 1.5;">Develop an optimized, linear multi-node network solution capable of restructuring real-time biometric arrays without causing memory leakage parameters.</p>
+                        <div class="assignment-meta">
+                            <span>Classification: Advanced Algorithms</span>
+                            <span style="color: var(--primary-orange);">Weight: 150 Points</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrated Multimode Smart Editor Panel -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Adaptive Smart Workspace</h3>
+                        <span style="font-size: 11px; font-weight: 700; color: var(--text-gray);" id="editor-status">Mode: Code Studio</span>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <!-- Mode Tabs -->
+                        <div class="editor-tabs">
+                            <button class="editor-tab active" id="tab-code" onclick="setWorkspaceMode('code')">Source Code Editor</button>
+                            <button class="editor-tab" id="tab-text" onclick="setWorkspaceMode('text')">Rich Text Document</button>
+                            <button class="editor-tab" id="tab-design" onclick="setWorkspaceMode('design')">Interactive Whiteboard</button>
+                        </div>
+
+                        <!-- Text Formatting Toolbar -->
+                        <div class="editor-toolbar" id="toolbar-text">
+                            <button class="toolbar-btn" onclick="execTextCommand('bold')">B</button>
+                            <button class="toolbar-btn" onclick="execTextCommand('italic')">I</button>
+                            <button class="toolbar-btn" onclick="execTextCommand('underline')">U</button>
+                        </div>
+
+                        <!-- Whiteboard Canvas Toolbar -->
+                        <div class="editor-toolbar" id="toolbar-design">
+                            <button class="toolbar-btn" onclick="setCanvasColor('#0F172A')">Black Pen</button>
+                            <button class="toolbar-btn" onclick="setCanvasColor('#FF8C42')">Orange Pen</button>
+                            <button class="toolbar-btn" onclick="setCanvasColor('#0284C7')">Blue Pen</button>
+                            <button class="toolbar-btn" style="margin-left: auto; background: #FEF2F2; color: #EF4444; border-color: #FEE2E2;" onclick="clearCanvas()">Clear Board</button>
+                        </div>
+
+                        <!-- Shared Dynamic Area -->
+                        <div class="canvas-wrapper">
+                            <!-- 1. REAL CODE EDITOR VIEW -->
+                            <div class="mode-view active" id="view-code">
+                                <div class="code-editor-container">
+                                    <div class="code-line-numbers" id="line-numbers">1</div>
+                                    <textarea id="code-textarea" class="code-textarea" oninput="handleCodeInput()" onscroll="syncCodeScroll()" spellcheck="false">// Function initialization telemetry arrays
+function optimizeTelemetry(matrix) {
+    if(!matrix) return null;
+    console.log("Analyzing architectural balance...");
+    return matrix;
+}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- 2. REAL TEXT EDITOR VIEW -->
+                            <div class="mode-view" id="view-text">
+                                <div id="text-editor" class="text-editor-area" contenteditable="true">
+                                    <p><b>Report Overview:</b> Systems are currently calibrated to standard executive limits. Data visualization indices confirm progressive mental processing efficiency.</p>
+                                </div>
+                            </div>
+
+                            <!-- 3. REAL WHITEBOARD VIEW -->
+                            <div class="mode-view" id="view-design">
+                                <canvas id="whiteboard" class="whiteboard-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn btn-muted" onclick="saveDraft()">Save Draft Layout</button>
+                        <button class="btn btn-orange" onclick="submitSolution()">Commit & Submit Solution</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Live DCC Parameter, Progressive Hinting, Pomodoro, and Anki System Links -->
+            <section>
+                <div class="panel">
+                    <h3 class="panel-heading">DCC Level Indicator</h3>
+                    <div class="dcc-container">
+                        <div class="dcc-value-display" id="dcc-text">07<span style="font-size: 16px; color: var(--text-gray); font-weight: 500;">/10</span></div>
+                        <p style="font-size: 12px; color: var(--text-gray); font-weight: 600; margin-top: 4px;">Dynamic Challenge Matrix Coefficient</p>
+                        <div class="dcc-track">
+                            <div class="dcc-fill" id="dcc-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-heading">Focus Cycle Clock</h3>
+                    <div class="pomodoro-box">
+                        <div class="pomo-time" id="pomo-display">25:00</div>
+                        <div class="pomo-controls">
+                            <button class="btn btn-muted" id="pomo-trigger-btn" style="padding: 6px 14px; font-size: 12px;" onclick="togglePomodoro()">Start</button>
+                            <button class="btn btn-muted" style="padding: 6px 14px; font-size: 12px;" onclick="resetPomodoro()">Reset Cycle</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Incremental Hint Stream</h3>
+                        <button class="btn btn-orange" id="hint-request-btn" style="padding: 6px 12px; font-size: 11px;" onclick="unlockNextHint()">Request Hint (-50 Pts)</button>
+                    </div>
+                    <div class="hint-stream">
+                        <div class="hint-node" id="hint-1">
+                            <strong>Hint 1: Structural Vectorization</strong>
+                            <div class="hint-content-text">Verify initialization conditions of the third-tier array structures prior to assigning node matrices.</div>
+                        </div>
+                        <div class="hint-node locked" id="hint-2">
+                            <strong id="hint-2-title">Hint 2: Parameter Lock [Requires 50 Pts]</strong>
+                            <div class="hint-content-text" id="hint-2-text">Apply localized cache pipelines across sequential nodes to bypass memory accumulation delays.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-heading">Spaced Repetition Link</h3>
+                    <div class="anki-hub">
+                        <div>
+                            <h4 style="font-size: 13px; font-weight: 700;">Anki Card Sync Queue</h4>
+                            <p style="font-size: 11px; color: var(--text-gray); margin-top: 2px;" id="anki-status">12 cards scheduled for review</p>
+                        </div>
+                        <button class="btn btn-muted" id="anki-btn" style="padding: 8px 14px; font-size: 12px;" onclick="executeAnkiReview()">Execute Review</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Core Reactive States
+        let ecosystemPoints = 350;
+        let dccCurrentLevel = 7;
+        let pomodoroTimerObj = null;
+        let pomodoroSecondsLeft = 1500; 
+        let pomodoroIsActive = false;
+
+        // Whiteboard State Logic variables
+        const canvas = document.getElementById('whiteboard');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let penColor = '#0F172A';
+
+        // 1. Workspace Multi-Mode Switch Engine
+        function setWorkspaceMode(mode) {
+            // Tab highlight reset
+            document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.editor-toolbar').forEach(tb => tb.style.display = 'none');
+            document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
+
+            const statusLabel = document.getElementById('editor-status');
+
+            if(mode === 'code') {
+                document.getElementById('tab-code').classList.add('active');
+                document.getElementById('view-code').classList.add('active');
+                statusLabel.innerText = "Mode: Code Studio";
+            } 
+            else if(mode === 'text') {
+                document.getElementById('tab-text').classList.add('active');
+                document.getElementById('view-text').classList.add('active');
+                document.getElementById('toolbar-text').style.display = 'flex';
+                statusLabel.innerText = "Mode: Executive Rich Text Editor";
+            } 
+            else if(mode === 'design') {
+                document.getElementById('tab-design').classList.add('active');
+                document.getElementById('view-design').classList.add('active');
+                document.getElementById('toolbar-design').style.display = 'flex';
+                statusLabel.innerText = "Mode: Architectural Whiteboard Canvas";
+                resizeCanvas(); // Ensure proper initialization dimensions
+            }
+            triggerDccShift();
+        }
+
+        // 2. Real Code Editor Core Functions
+        function handleCodeInput() {
+            const textarea = document.getElementById('code-textarea');
+            const lineNumbers = document.getElementById('line-numbers');
+            const lines = textarea.value.split('\n').length;
+            
+            let lineStr = "";
+            for(let i = 1; i <= lines; i++) {
+                lineStr += i + "<br>";
+            }
+            lineNumbers.innerHTML = lineStr;
+        }
+
+        function syncCodeScroll() {
+            const textarea = document.getElementById('code-textarea');
+            const lineNumbers = document.getElementById('line-numbers');
+            lineNumbers.scrollTop = textarea.scrollTop;
+        }
+
+        // 3. Real Rich Text Editor Actions
+        function execTextCommand(command) {
+            document.execCommand(command, false, null);
+        }
+
+        // 4. Real Interactive Whiteboard Engine
+        function resizeCanvas() {
+            // Sync canvas render buffer dimension matching CSS layouts boundaries
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = penColor;
+        }
+
+        function setCanvasColor(color) {
+            penColor = color;
+            ctx.strokeStyle = color;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Mouse/Touch Drawing Event Listeners 
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; draw(e); });
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => { ctx.beginPath(); isDrawing = false; });
+        canvas.addEventListener('mouseleave', () => { ctx.beginPath(); isDrawing = false; });
+
+        function draw(e) {
+            if(!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        // 5. Global Core Interface Simulation Subsystems
+        function unlockNextHint() {
+            if (ecosystemPoints >= 50) {
+                ecosystemPoints -= 50;
+                document.getElementById('points-display').innerText = ecosystemPoints;
+                const hintTwoNode = document.getElementById('hint-2');
+                hintTwoNode.classList.remove('locked');
+                document.getElementById('hint-2-title').innerText = "Hint 2: Memory Pipeline Engineering";
+                document.getElementById('hint-2-text').style.display = "block";
+                
+                const requestBtn = document.getElementById('hint-request-btn');
+                requestBtn.innerText = "All Hints Unlocked";
+                requestBtn.disabled = true;
+            } else {
+                alert("Insufficient Ecosystem Points remaining.");
+            }
+        }
+
+        function togglePomodoro() {
+            const triggerBtn = document.getElementById('pomo-trigger-btn');
+            if (pomodoroIsActive) {
+                clearInterval(pomodoroTimerObj);
+                pomodoroIsActive = false;
+                triggerBtn.innerText = "Start";
+            } else {
+                pomodoroIsActive = true;
+                triggerBtn.innerText = "Pause";
+                pomodoroTimerObj = setInterval(() => {
+                    if (pomodoroSecondsLeft > 0) {
+                        pomodoroSecondsLeft--;
+                        const min = Math.floor(pomodoroSecondsLeft / 60).toString().padStart(2, '0');
+                        const sec = (pomodoroSecondsLeft % 60).toString().padStart(2, '0');
+                        document.getElementById('pomo-display').innerText = `${min}:${sec}`;
+                    } else {
+                        clearInterval(pomodoroTimerObj);
+                        alert("Focus cycle completed.");
+                        resetPomodoro();
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetPomodoro() {
+            clearInterval(pomodoroTimerObj);
+            pomodoroIsActive = false;
+            pomodoroSecondsLeft = 1500;
+            document.getElementById('pomo-display').innerText = "25:00";
+            document.getElementById('pomo-trigger-btn').innerText = "Start";
+        }
+
+        function triggerDccShift() {
+            dccCurrentLevel = Math.floor(Math.random() * (9 - 6 + 1)) + 6;
+            document.getElementById('dcc-text').innerHTML = `0${dccCurrentLevel}<span style="font-size: 16px; color: var(--text-gray); font-weight: 500;">/10</span>`;
+            document.getElementById('dcc-bar').style.width = `${dccCurrentLevel}0%`;
+        }
+
+        function dismissWarning() { document.getElementById('integrity-banner').classList.add('hidden'); }
+        function saveDraft() { alert("Draft metrics compiled and captured."); }
+        function submitSolution() { alert("Data packets securely deployed to academic cloud infrastructure."); }
+        function executeAnkiReview() {
+            document.getElementById('anki-btn').innerText = "Processing...";
+            setTimeout(() => {
+                document.getElementById('anki-status').innerText = "0 cards remaining.";
+                document.getElementById('anki-btn').innerText = "Completed";
+                document.getElementById('anki-btn').disabled = true;
+            }, 800);
+        }
+
+        // Boot Init execution
+        handleCodeInput();
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Telemetry & Aptitude | ASQOT Academic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN for Advanced Scientific Data Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --sky-blue-bg: #F8FAFC;
+            --sky-blue-card: #F0F9FF;
+            --sky-blue-accent: #E0F2FE;
+            --primary-orange: #FF8C42;
+            --primary-orange-hover: #E57833;
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --border: #E2E8F0;
+            --alert-red: #EF4444;
+            --alert-red-bg: #FEF2F2;
+            --success-green: #10B981;
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--sky-blue-bg); color: var(--text-dark); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+        /* Navigation Sidebar */
+        .sidebar { width: 260px; background: var(--white); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-logo { font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 48px; letter-spacing: -0.5px; text-decoration: none; display: block; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-gray); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: var(--radius-md); transition: var(--transition); }
+        .nav-item.active a, .nav-item a:hover { background: var(--sky-blue-bg); color: var(--text-dark); }
+        .nav-item.active a { border-right: 3px solid var(--primary-orange); background: var(--sky-blue-card); color: var(--text-dark); border-radius: var(--radius-md) 0 0 var(--radius-md); }
+        
+        .sidebar-footer { border-top: 1px solid var(--border); padding-top: 24px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 38px; height: 38px; background: var(--sky-blue-accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--text-dark); border: 1px solid var(--border); }
+
+        /* Main Workspace Container */
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 48px; width: calc(100% - 260px); }
+
+        /* Top Header Area */
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .workspace-title h1 { font-size: 24px; font-weight: 700; color: var(--text-dark); }
+        .workspace-title p { color: var(--text-gray); font-size: 14px; margin-top: 4px; }
+
+        /* Layout Framework */
+        .dashboard-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; }
+
+        /* Global Panels Styling */
+        .panel { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 24px; transition: var(--transition); }
+        .panel:hover { border-color: #CBD5E1; }
+        .panel-heading { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Dynamic Advisory Banner */
+        .advisory-banner { background: var(--sky-blue-card); border: 1px solid var(--sky-blue-accent); border-radius: var(--radius-md); padding: 16px 20px; font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; }
+        .advisory-banner.danger { background: var(--alert-red-bg); border-color: var(--alert-red); color: var(--alert-red); }
+        
+        /* Integrity Anomaly Warning */
+        .integrity-alert { background: var(--alert-red-bg); border: 1px dashed var(--alert-red); border-radius: var(--radius-md); padding: 14px 18px; font-size: 12px; font-weight: 700; color: var(--alert-red); margin-top: 16px; display: none; }
+
+        /* Chart Canvas Sizing Holders */
+        .chart-holder { position: relative; width: 100%; height: 280px; margin-top: 10px; }
+
+        /* Historical Log Lists */
+        .historical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .log-box { padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .log-box.optimal { background: #F0FDF4; border-color: #DCFCE7; }
+        .log-box.critical { background: #FFF1F2; border-color: #FFE4E6; }
+        .log-box h4 { font-size: 12px; text-transform: uppercase; color: var(--text-gray); margin-bottom: 4px; }
+        .log-box p { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+
+        /* Controller Elements for Emulation */
+        .telemetry-controller { display: flex; gap: 12px; align-items: center; margin-top: 16px; background: var(--sky-blue-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .controller-btn { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; border: 1px solid var(--border); background: var(--white); cursor: pointer; transition: var(--transition); }
+        .controller-btn:hover { background: var(--sky-blue-accent); }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Institutional Navigation Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">ASQOT</a>
+          <ul class="nav-menu">
+         <li class="nav-item active"><a href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item "><a href="learning_space.html">Learning Space</a></li>
+            <li class="nav-item"><a href="fingerprint.html">Thinking Fingerprint</a></li>
+            <li class="nav-item"><a href="achievements.html">Metrics & Milestones</a></li>
+            <li class="nav-item"><a href="profile.html">Professional Profile</a></li>
+              <li class="nav-item"><a href="commonication.html">Commonication</a></li>
+              <li class="nav-item"><a href="cognitive_fatigue.html">Commonication</a></li>
+            <li class="nav-item"><a href="settings.html">System Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar">JD</div>
+                <div>
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">John Doe</h4>
+                    <p style="font-size: 11px; color: var(--text-gray); font-weight: 500;">ID: 2609-ASQ</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Workspace Wrapper -->
+    <main class="main-content">
+        
+        <!-- Workspace Dynamic Header -->
+        <header class="workspace-header">
+            <div class="workspace-title">
+                <h1>Cognitive Telemetry & Aptitude Analysis</h1>
+                <p>Real-time algorithmic mapping of neural load indexes and structural behavioral profiles.</p>
+            </div>
+        </header>
+
+        <!-- Dynamic Advisory Smart Banner -->
+        <div class="advisory-banner" id="advisory-node">
+            <span id="advisory-text">System Status: Cognitive telemetry indices operating within nominal parameters. No performance anomalies noted.</span>
+        </div>
+
+        <!-- Master Dashboard Framework Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Grid Pane: Cognitive Fatigue Map Telemetry Pipeline -->
+            <section>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Biometric Processing Map</h3>
+                        <span style="font-size: 11px; font-weight: 700; color: var(--text-gray);">Tracking Interval: 60s Stream</span>
+                    </div>
+
+                    <!-- Line Chart Visualizer -->
+                    <div class="chart-holder">
+                        <canvas id="telemetryLineChart"></canvas>
+                    </div>
+
+                    <!-- Interactive Live Telemetry Simulator Controls -->
+                    <div class="telemetry-controller">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--text-gray);">Emulate System Stress:</span>
+                        <button class="controller-btn" onclick="injectTelemetryState('nominal')">Set Nominal State (45%)</button>
+                        <button class="controller-btn" style="color: var(--alert-red);" onclick="injectTelemetryState('critical')">Inject Fatigue Load (88%)</button>
+                    </div>
+                </div>
+
+                <!-- Historical Audit Ledger Logs -->
+                <div class="panel">
+                    <h3 class="panel-heading">Historical Efficiency Extremes</h3>
+                    <div class="historical-grid">
+                        <div class="log-box optimal">
+                            <h4>Peak Focus Velocity</h4>
+                            <p id="log-peak">09:15 - 10:45 UTC</p>
+                            <span style="font-size: 11px; color: var(--success-green); font-weight: 600;">Error Rate: 1.2%</span>
+                        </div>
+                        <div class="log-box critical">
+                            <h4>Maximum Fatigue Accumulation</h4>
+                            <p id="log-nadir">21:30 - 22:15 UTC</p>
+                            <span style="font-size: 11px; color: var(--alert-red); font-weight: 600;">Response Delay: +4.2s</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Grid Pane: Aptitude Fingerprint Multi-Axis Vectoring -->
+            <section>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Aptitude Behavioral Fingerprint</h3>
+                        <span style="font-size: 11px; font-weight: 700; color: var(--text-gray);">Matrix Validation Vector</span>
+                    </div>
+
+                    <!-- Radar Chart Visualizer -->
+                    <div class="chart-holder" style="height: 320px;">
+                        <canvas id="aptitudeRadarChart"></canvas>
+                    </div>
+
+                    <!-- Integrity Warning Verification Output Block -->
+                    <div class="integrity-alert" id="integrity-alert-node">
+                        CRITICAL ALERT: External AI structural matching index suggests high duplication anomaly. Human verification profile metrics have dropped below 60% threshold limit.
+                    </div>
+
+                    <!-- Interactive Live Simulation Controls for Fingerprint -->
+                    <div class="telemetry-controller" style="margin-top: 24px;">
+                        <span style="font-size: 11px; font-weight: 700; color: var(--text-gray);">Emulate Profile Balance:</span>
+                        <button class="controller-btn" onclick="injectFingerprintProfile('human')">Organic Execution Profile</button>
+                        <button class="controller-btn" style="color: var(--alert-red);" onclick="injectFingerprintProfile('ai')">Inject High AI Synthesis Match</button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripting Infrastructure Layer: Engine Handling Charts and Dynamic Triggers -->
+    <script>
+        // Global variables holding chart entities
+        let telemetryChartInstance = null;
+        let aptitudeChartInstance = null;
+
+        // 1. Chart Initializations
+        document.addEventListener("DOMContentLoaded", function() {
+            initTelemetryChart();
+            initAptitudeChart();
+        });
+
+        // 2. Cognitive Telemetry Linear Graph Initialization Logic
+        function initTelemetryChart() {
+            const ctx = document.getElementById('telemetryLineChart').getContext('2d');
+            
+            // Standard historical data mapping
+            const timelineLabels = ['T-50s', 'T-40s', 'T-30s', 'T-20s', 'T-10s', 'Current Epoch'];
+            
+            telemetryChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timelineLabels,
+                    datasets: [
+                        {
+                            label: 'Typing Velocity (WPM)',
+                            data: [72, 75, 71, 68, 74, 70],
+                            borderColor: '#0284C7',
+                            backgroundColor: 'rgba(2, 132, 199, 0.05)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Accuracy Coefficient (%)',
+                            data: [96, 94, 95, 91, 92, 94],
+                            borderColor: '#10B981',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            tension: 0.2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Disconnection Delay (Sec)',
+                            data: [1.2, 1.4, 1.1, 2.5, 1.8, 1.5],
+                            borderColor: '#FF8C42',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' } } }
+                    },
+                    scales: {
+                        y: { type: 'linear', display: true, position: 'left', grid: { color: '#F1F5F9' }, ticks: { font: { family: 'Plus Jakarta Sans' } } },
+                        y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { font: { family: 'Plus Jakarta Sans' } } },
+                        x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        // 3. Aptitude Radar Geometric Profiling Chart Initialization
+        function initAptitudeChart() {
+            const ctx = document.getElementById('aptitudeRadarChart').getContext('2d');
+            
+            aptitudeChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Impulsivity Index', 'Depth Score', 'Vocabulary Richness', 'AI Match Score'],
+                    datasets: [{
+                        label: 'Organic Cognitive Footprint',
+                        data: [78, 85, 82, 24], // Standard baseline matching profile parameters
+                        backgroundColor: 'rgba(255, 140, 66, 0.15)',
+                        borderColor: '#FF8C42',
+                        pointBackgroundColor: '#FF8C42',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#E2E8F0' },
+                            grid: { color: '#E2E8F0' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false },
+                            pointLabels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' }, color: '#475569' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. Interactive State Machine Controller - Cognitive Telemetry Interface Trigger
+        function injectTelemetryState(state) {
+            const advisoryNode = document.getElementById('advisory-node');
+            const advisoryText = document.getElementById('advisory-text');
+
+            if (state === 'critical') {
+                // Dynamically modify linear dataset indexes to show severe structural deterioration metrics
+                telemetryChartInstance.data.datasets[0].data = [65, 58, 44, 35, 31, 25]; // typing drop collapse
+                telemetryChartInstance.data.datasets[1].data = [94, 88, 79, 72, 65, 54]; // precision metric decay
+                telemetryChartInstance.data.datasets[2].data = [1.8, 3.2, 5.4, 7.1, 8.9, 11.2]; // delay parameter ballooning
+                telemetryChartInstance.data.datasets[0].borderColor = '#EF4444'; // turn line boundary indicator warning red
+                telemetryChartInstance.update();
+
+                // UI Banner updates mapping to 80%+ structural breach parameters
+                advisoryNode.classList.add('danger');
+                advisoryText.innerText = "CRITICAL ADVISORY LEVEL EXCEEDED: Cognitive fatigue threshold verified at 88%. Processing speeds severely compromised. Take an immediate 15-minute rest cycle execution.";
+            } else {
+                // Return to baseline execution records tracking values
+                telemetryChartInstance.data.datasets[0].data = [72, 75, 71, 68, 74, 70];
+                telemetryChartInstance.data.datasets[1].data = [96, 94, 95, 91, 92, 94];
+                telemetryChartInstance.data.datasets[2].data = [1.2, 1.4, 1.1, 2.5, 1.8, 1.5];
+                telemetryChartInstance.data.datasets[0].borderColor = '#0284C7';
+                telemetryChartInstance.update();
+
+                advisoryNode.classList.remove('danger');
+                advisoryText.innerText = "System Status: Cognitive telemetry indices operating within nominal parameters. No performance anomalies noted.";
+            }
+        }
+
+        // 5. Interactive State Machine Controller - Aptitude Matching Profile Trigger
+        function injectFingerprintProfile(profile) {
+            const alertNode = document.getElementById('integrity-alert-node');
+
+            if (profile === 'ai') {
+                // Shift indices parameters displaying anomalous behavior signatures (Low analytical depth, absolute AI overlap matching metrics)
+                aptitudeChartInstance.data.datasets[0].data = [95, 20, 40, 92]; 
+                aptitudeChartInstance.data.datasets[0].label = 'Anomalous Synthesis Footprint';
+                aptitudeChartInstance.data.datasets[0].borderColor = '#EF4444';
+                aptitudeChartInstance.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                aptitudeChartInstance.update();
+
+                // Unveil verification failure warning flags block
+                alertNode.style.display = 'block';
+            } else {
+                // Reset structural verification profile matrices
+                aptitudeChartInstance.data.datasets[0].data = [78, 85, 82, 24];
+                aptitudeChartInstance.data.datasets[0].label = 'Organic Cognitive Footprint';
+                aptitudeChartInstance.data.datasets[0].borderColor = '#FF8C42';
+                aptitudeChartInstance.data.datasets[0].backgroundColor = 'rgba(255, 140, 66, 0.15)';
+                aptitudeChartInstance.update();
+
+                alertNode.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
